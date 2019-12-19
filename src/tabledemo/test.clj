@@ -6,7 +6,7 @@
              [tech.ml.dataset :as ds])
   (:import [java.text SimpleDateFormat]))
 
-(def date-format "yyy-mm-dd")
+(def date-format "yyyy-mm-dd")
 (def sdf (SimpleDateFormat. date-format))
 
 (set! *warn-on-reflection* true)
@@ -36,7 +36,6 @@
   (with-open [out (io/writer the-test-file)]
     (.write out (str (clojure.string/join "," fields)
                      \newline))
-
     (doseq [r (test-rows)]
       (.write out (str (clojure.string/join "," r) \newline)))))
 
@@ -63,12 +62,12 @@
 ;;Manual parsing (by row):
 
 (defn parse-row [idx->f xs]
-  (map-indexed (fn [idx v] ((idx->f idx) f))))
+  (map-indexed (fn [idx v] ((idx->f idx) v))))
 
 ;;hard way, but more control...
 (defn custom-parse [l]
   (let [xs  (clojure.string/split l #",")]
-    (into [(first xs)] (map maybe-double) (subvec xs 1))))
+    (into [(first xs)] (map maybe-double?) (subvec xs 1))))
 
 (defn file->records []
   (with-open [rdr (io/reader the-test-file)]
